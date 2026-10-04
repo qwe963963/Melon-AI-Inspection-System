@@ -1,4 +1,5 @@
-# AI 視覺：哈密瓜自動化裂紋與重量偵測系統> **AI-Powered Edge Inspection System with Hardware-Software Handshake Protocol**
+# AI 視覺：哈密瓜自動化裂紋與重量偵測系統> 
+**AI-Powered Edge Inspection System with Hardware-Software Handshake Protocol**
 
 此專題為一套結合影像偵測（YOLOv8）、HX711 重量感應與 Arduino 旋轉機構的自動化辨識系統。
 透過雙向握手協定（Handshake Protocol），實現「自動秤重 ➔ 旋轉拍照 ➔ 缺陷辨識 ➔ 數據彙整」的全流程檢測系統。
