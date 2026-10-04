@@ -37,31 +37,25 @@
 
 ---
 
-## 啟動條件 (How to Run)
-
 ### 1. Python 軟體端設定
 
-**專案結構**
+**專案結構 (Project Structure)**
+
 ```text
-my_project/
-├── main.py
-└── yolov8n.pt
-```
-
-**環境安裝**
-請先安裝必要的 Python 套件：
-```bash
-pip install ultralytics opencv-python pyserial
-```
-
-**執行方式**
-執行主程式進行物件偵測：
-```bash
-python main.py
-```
-
----
-
+Melon-AI-Inspection-System/
+├── arduino-hardware/                    # Arduino 檔案
+├── python-software                 # Python 主控程式 (UI、影像辨識與 Serial 通訊)
+├── yolov8n_finetune.pt         # [關鍵] 核心 AI 權重：微調訓練後的哈密瓜瑕疵辨識模型
+├── yolov8n.pt                  # 預設/備用 YOLOv8 Nano 基礎權重
+│
+├── 📁 系統自動建立之輸出目錄 (Outputs)
+│   ├── detect_before/          # 原始拍攝影像備份
+│   ├── detect_after/           # 相機即時檢測之 AI 標註結果圖
+│   └── detect_after_photo/     # 單張照片測試模式之 AI 標註結果圖
+│
+└── 📁 系統自動建立之紀錄檔 (Logs)
+    ├── log_camera.csv          # 相機檢測模式之數據紀錄報表
+    └── log_photo.csv           # 照片測試模式之數據紀錄報表
 ### 2. Arduino 硬體端設定
 
 本專案使用 Arduino 搭配紅色 HX711 秤重模組讀取重量，並透過 Serial 接收 Python 訊號控制馬達驅動板來帶動轉盤。
