@@ -1,4 +1,4 @@
-# AI 視覺：哈密瓜自動化裂紋與重量偵測系統> 
+# AI 視覺：哈密瓜自動化裂紋與重量偵測系統
 **AI-Powered Edge Inspection System with Hardware-Software Handshake Protocol**
 
 此專題為一套結合影像偵測（YOLOv8）、HX711 重量感應與 Arduino 旋轉機構的自動化辨識系統。
@@ -9,7 +9,7 @@
 ### 系統架構與技術 (Tech Stack)
 
 * **Libraries (函式庫)**：`Ultralytics YOLOv8` (AI偵測)、`OpenCV` (影像處理與 MJPG 強制解碼)、`PySerial` (雙向連結)、`HX711.h` (重量感應)
-* **Systems (核心系統與UI介面)**：Python 3.x (主控)、Tkinter GUI (現場圖形操作介面)、CSV 自動化日誌 (檢測數據報表)、Arduino (.ino) (控制馬達轉動與重量讀取)
+* **Systems (核心系統與 UI 介面)**：Python 3.x (主控)、Tkinter GUI (現場圖形操作介面)、CSV 自動化日誌 (檢測數據報表)、Arduino (.ino) (控制馬達轉動與重量讀取)
 * **Hardware (實體硬體與感測器)**：Arduino Uno (主控板)、HX711 Load Cell (重量感應模組)、旋轉直流馬達、1080p HD WebCam (高清視覺鏡頭)
 
 ---
@@ -31,11 +31,13 @@
 ### 系統優化與工程亮點 (Engineering Highlights)
 
 本專題針對實體環境變因進行了多項系統調校，確保檢測流程的穩定性與精準度：
-* **軟硬體同步 (Delay ➔ Handshake Protocol)**：捨棄傳統時間延遲(sleep)機制，而使用雙向握手協定，解決軟硬體時間匹配與物理重量干擾問題
-* **瑕疵框重複過濾 (Bounding Box Deduplication)**：針對辨識時同一照片，部分瑕疵有重複計算問題，而導致綠色方框重疊，影響最終結果。使用距離與重疊度過濾邏輯，去除冗餘標註，提升視覺介面清晰度與數據統計精準度。
+* **軟硬體同步 (Delay ➔ Handshake Protocol)**：捨棄傳統時間延遲 (sleep) 機制，使用雙向握手協定，解決軟硬體時間匹配與物理重量干擾問題。
+* **瑕疵框重複過濾 (Bounding Box Deduplication)**：針對辨識時同一照片部分瑕疵重複計算問題，使用距離與重疊度過濾邏輯（類似 NMS 概念），去除冗餘標註，提升視覺介面清晰度與數據統計精準度。
 * **實體邊界條件與防呆保護**：實作 15 秒 Timeout 異常跳出機制、重量清零門檻（<10g 自動歸零）以及轉盤 ROI 視覺區域裁切，確保現場運作的極致穩定。
 
 ---
+
+## 啟動條件 (How to Run)
 
 ### 1. Python 軟體端設定
 
@@ -43,19 +45,37 @@
 
 ```text
 Melon-AI-Inspection-System/
-├── arduino-hardware/                    # Arduino 檔案
-├── python-software                 # Python 主控程式 (UI、影像辨識與 Serial 通訊)
-├── yolov8n_finetune.pt         # [關鍵] 核心 AI 權重：微調訓練後的哈密瓜瑕疵辨識模型
-├── yolov8n.pt                  # 預設/備用 YOLOv8 Nano 基礎權重
+├── arduino-hardware/                 # Arduino 韌體專案資料夾 (包含 .ino 燒錄檔)
+├── python-software.py                # Python 主控程式 (UI、影像辨識與 Serial 通訊)
+├── yolov8n_finetune.pt               # [關鍵] 核心 AI 權重：微調訓練後的哈密瓜瑕疵辨識模型
+├── yolov8n.pt                        # 預設/備用 YOLOv8 Nano 基礎權重
 │
 ├── 📁 系統自動建立之輸出目錄 (Outputs)
-│   ├── detect_before/          # 原始拍攝影像備份
-│   ├── detect_after/           # 相機即時檢測之 AI 標註結果圖
-│   └── detect_after_photo/     # 單張照片測試模式之 AI 標註結果圖
+│   ├── detect_before/                # 原始拍攝影像備份
+│   ├── detect_after/                 # 相機即時檢測之 AI 標註結果圖
+│   └── detect_after_photo/           # 單張照片測試模式之 AI 標註結果圖
 │
 └── 📁 系統自動建立之紀錄檔 (Logs)
-    ├── log_camera.csv          # 相機檢測模式之數據紀錄報表
-    └── log_photo.csv           # 照片測試模式之數據紀錄報表
+    ├── log_camera.csv                # 相機檢測模式之數據紀錄報表
+    └── log_photo.csv                 # 照片測試模式之數據紀錄報表
+```
+
+**環境安裝 (Dependencies)**
+
+請先安裝系統所需的 Python 核心套件：
+```bash
+pip install ultralytics opencv-python pyserial numpy
+```
+
+**執行方式 (How to Run)**
+
+開啟終端機 (Terminal / Command Prompt)，執行主控程式：
+```bash
+python python-software.py
+```
+
+---
+
 ### 2. Arduino 硬體端設定
 
 本專案使用 Arduino 搭配紅色 HX711 秤重模組讀取重量，並透過 Serial 接收 Python 訊號控制馬達驅動板來帶動轉盤。
