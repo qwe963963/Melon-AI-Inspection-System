@@ -1,5 +1,4 @@
-# AI 協同開發：哈密瓜自動化裂紋與重量偵測系統
-> **AI-Powered Edge Inspection System with Hardware-Software Handshake Protocol**
+# AI 視覺：哈密瓜自動化裂紋與重量偵測系統> **AI-Powered Edge Inspection System with Hardware-Software Handshake Protocol**
 
 此專題為一套結合影像偵測（YOLOv8）、HX711 重量感應與 Arduino 旋轉機構的自動化辨識系統。
 透過雙向握手協定（Handshake Protocol），實現「自動秤重 ➔ 旋轉拍照 ➔ 缺陷辨識 ➔ 數據彙整」的全流程檢測系統。
@@ -28,13 +27,12 @@
 
 ---
 
-### AI 協同開發與現場硬體診斷 (AI-Assisted Engineering)
+### 系統優化與工程亮點 (Engineering Highlights)
 
-本專題採用 **AI Pair Programming** 模式，開發者基於現實調整不同參數及程式本身，並引導 AI 進行迭代、重組與 Bug 修復。以下舉例：
-
-* **軟體硬體協定 (Delay ➔ Handshake Protocol)**：原系統採用時間延遲 (`sleep`) 盲等硬體，導致軟硬體同步極不穩定；開發者提出並引導重組為雙向握手協定（`GO` / `DONE` 狀態），解決時序不匹配問題，以避免物理性變因。
-* **瑕疵框重複過濾 (Bounding Box Deduplication)**：針對辨識時同一照片，部分瑕疵有重複計算問題，而導致綠色方框重疊，影響最終結果。提出距離與重疊度過濾邏輯，去除冗餘標註，提升視覺介面清晰度與數據統計精準度。
-* **實體邊界條件與 UX 調校**：包含 15 秒 Timeout 異常保護、重量清零門檻（<10g 歸零）以及轉盤 ROI 區域裁切，確保實體現場運作穩定。
+本專題針對實體環境變因進行了多項系統調校，確保檢測流程的穩定性與精準度：
+* **軟硬體同步 (Delay ➔ Handshake Protocol)**：捨棄傳統時間延遲(sleep)機制，而使用雙向握手協定，解決軟硬體時間匹配與物理重量干擾問題
+* **瑕疵框重複過濾 (Bounding Box Deduplication)**：針對辨識時同一照片，部分瑕疵有重複計算問題，而導致綠色方框重疊，影響最終結果。使用距離與重疊度過濾邏輯，去除冗餘標註，提升視覺介面清晰度與數據統計精準度。
+* **實體邊界條件與防呆保護**：實作 15 秒 Timeout 異常跳出機制、重量清零門檻（<10g 自動歸零）以及轉盤 ROI 視覺區域裁切，確保現場運作的極致穩定。
 
 ---
 
