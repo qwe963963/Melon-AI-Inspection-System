@@ -1,0 +1,91 @@
+# AI 協同開發：哈密瓜自動化裂紋與重量偵測系統
+> **AI-Powered Edge Inspection System with Hardware-Software Handshake Protocol**
+
+此專題為一套結合影像偵測（YOLOv8）、HX711 重量感應與 Arduino 旋轉機構的自動化辨識系統。
+透過雙向握手協定（Handshake Protocol），實現「自動秤重 ➔ 旋轉拍照 ➔ 缺陷辨識 ➔ 數據彙整」的全流程檢測系統。
+
+---
+
+### 系統架構與技術 (Tech Stack)
+
+* **Libraries (函式庫)**：`Ultralytics YOLOv8` (AI偵測)、`OpenCV` (影像處理與 MJPG 強制解碼)、`PySerial` (雙向連結)、`HX711.h` (重量感應)
+* **Systems (核心系統與UI介面)**：Python 3.x (主控)、Tkinter GUI (現場圖形操作介面)、CSV 自動化日誌 (檢測數據報表)、Arduino (.ino) (控制馬達轉動與重量讀取)
+* **Hardware (實體硬體與感測器)**：Arduino Uno (主控板)、HX711 Load Cell (重量感應模組)、旋轉直流馬達、1080p HD WebCam (高清視覺鏡頭)
+
+---
+
+### 軟硬體雙向握手協定 (Handshake Protocol)
+
+採用比傳統延遲等待還穩定的雙向應答機制，解決實體機構運作時的外在因素干擾（重量）。
+系統透過 USB 序列埠 (Baud 115200) 建立 Python（軟體端）與 Arduino（硬體端）之間的溝通機制：
+
+| 方向 | 傳輸字串/指令 | 觸發時間與簡述 |
+| :--- | :--- | :--- |
+| **Arduino ➔ Python** | `SYSTEM_READY` | Arduino 在 `setup()` 完成 HX711 初始化與校正（Tare）後發送，通知 Python 硬體已就緒。 |
+| **Arduino ➔ Python** | `WEIGHT:<value>` | Arduino 每 2 秒回傳重量，Python 即時更新 `current_weight`。 |
+| **Python ➔ Arduino** | `GO\n` | Python 完成當前角度拍照並存檔後（`shot_count < 3`），發送指令觸發 Arduino 馬達旋轉平台。 |
+| **Arduino ➔ Python** | `DONE\n` | Arduino 馬達旋轉到位後回傳，Python 解析到 `DONE` 後進行下一次拍照。此套流程重複三次，共拍攝四個面。 |
+
+---
+
+### AI 協同開發與現場硬體診斷 (AI-Assisted Engineering)
+
+本專題採用 **AI Pair Programming** 模式，開發者基於現實調整不同參數及程式本身，並引導 AI 進行迭代、重組與 Bug 修復。以下舉例：
+
+* **軟體硬體協定 (Delay ➔ Handshake Protocol)**：原系統採用時間延遲 (`sleep`) 盲等硬體，導致軟硬體同步極不穩定；開發者提出並引導重組為雙向握手協定（`GO` / `DONE` 狀態），解決時序不匹配問題，以避免物理性變因。
+* **瑕疵框重複過濾 (Bounding Box Deduplication)**：針對辨識時同一照片，部分瑕疵有重複計算問題，而導致綠色方框重疊，影響最終結果。提出距離與重疊度過濾邏輯，去除冗餘標註，提升視覺介面清晰度與數據統計精準度。
+* **實體邊界條件與 UX 調校**：包含 15 秒 Timeout 異常保護、重量清零門檻（<10g 歸零）以及轉盤 ROI 區域裁切，確保實體現場運作穩定。
+
+---
+
+## 啟動條件 (How to Run)
+
+### 1. Python 軟體端設定
+
+**專案結構**
+```text
+my_project/
+├── main.py
+└── yolov8n.pt
+```
+
+**環境安裝**
+請先安裝必要的 Python 套件：
+```bash
+pip install ultralytics opencv-python pyserial
+```
+
+**執行方式**
+執行主程式進行物件偵測：
+```bash
+python main.py
+```
+
+---
+
+### 2. Arduino 硬體端設定
+
+本專案使用 Arduino 搭配紅色 HX711 秤重模組讀取重量，並透過 Serial 接收 Python 訊號控制馬達驅動板來帶動轉盤。
+
+**硬體接線**
+* **開發板**：Arduino Uno (含擴充板，接腳標示為 G=負極 / V=正極 / S=訊號)
+* **紅色秤重模組 (HX711)**：
+  * DOUT 接擴充板 **D6 的 S 腳位**
+  * SCK 接擴充板 **D7 的 S 腳位**
+  * VCC 接擴充板的 **V 腳位 (正極)**
+  * GND 接擴充板的 **G 腳位 (負極)**
+* **紅色馬達控制板 (如 L298N 模組)**：
+  * 控制訊號線接擴充板 **D11 的 S 腳位** (支援 PWM)
+  * 轉盤馬達連接至控制板側邊的藍色接線端子
+  * 模組下方的藍色端子需連接獨立電源與 GND，以提供馬達足夠動力
+
+**軟體安裝**
+請在 Arduino IDE 的「管理函式庫」中搜尋並安裝以下套件：
+* `HX711 Arduino Library`
+
+**執行方式**
+1. 將 Arduino 連接至電腦，在 IDE 選擇對應的開發板與連接埠。
+2. 點擊 **「上傳」** 將程式燒錄至 Arduino。
+3. 開啟「序列埠監控器 (Serial Monitor)」，**將 Baud rate 設為 `115200`**。
+   * 系統每 2 秒會自動回報 `WEIGHT:數值`。
+   * 在輸入框發送 `GO`，馬達即會轉動 1 秒並回傳 `DONE`。
