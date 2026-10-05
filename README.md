@@ -39,12 +39,14 @@
 
 ## 啟動條件 (How to Run)
 
+
+###  Python 軟體端設定
+
+
 <details>
 <summary><b> 點此展開「詳細環境安裝與啟動步驟 」</b></summary>
 
 
-
-### 1. Python 軟體端設定
 
 **專案結構 (Project Structure)**
 
@@ -83,7 +85,7 @@ python python-software.py
 
 ---
 
-### 2. Arduino 硬體端設定
+###  Arduino 硬體端設定
 
 本專案使用 Arduino 搭配紅色 HX711 秤重模組讀取重量，並透過 Serial 接收 Python 訊號控制馬達驅動板來帶動轉盤。
 
