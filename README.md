@@ -39,6 +39,11 @@
 
 ## 啟動條件 (How to Run)
 
+<details>
+<summary><b> 點此展開「詳細環境安裝與啟動步驟 」</b></summary>
+
+
+
 ### 1. Python 軟體端設定
 
 **專案結構 (Project Structure)**
@@ -74,13 +79,19 @@ pip install ultralytics opencv-python pyserial numpy
 python python-software.py
 ```
 
+</details>
+
 ---
 
 ### 2. Arduino 硬體端設定
 
 本專案使用 Arduino 搭配紅色 HX711 秤重模組讀取重量，並透過 Serial 接收 Python 訊號控制馬達驅動板來帶動轉盤。
 
-**硬體接線**
+<details>
+<summary><b> 點此展開「硬體詳細配線方式」</b></summary>
+
+
+
 * **開發板**：Arduino Uno (含擴充板，接腳標示為 G=負極 / V=正極 / S=訊號)
 * **紅色秤重模組 (HX711)**：
   * DOUT 接擴充板 **D6 的 S 腳位**
@@ -90,7 +101,7 @@ python python-software.py
 * **紅色馬達控制板 (如 L298N 模組)**：
   * 控制訊號線接擴充板 **D11 的 S 腳位** (支援 PWM)
   * 轉盤馬達連接至控制板側邊的藍色接線端子
-  * 模組下方的藍色端子需連接獨立電源與 GND，以提供馬達足夠動力
+  * 下方的藍色端子需連接獨立電源與 GND，以提供馬達足夠動力
 
 **軟體安裝**
 請在 Arduino IDE 的「管理函式庫」中搜尋並安裝以下套件：
@@ -102,3 +113,5 @@ python python-software.py
 3. 開啟「序列埠監控器 (Serial Monitor)」，**將 Baud rate 設為 `115200`**。
    * 系統每 2 秒會自動回報 `WEIGHT:數值`。
    * 在輸入框發送 `GO`，馬達即會轉動 1 秒並回傳 `DONE`。
+
+</details>
