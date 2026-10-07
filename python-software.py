@@ -218,18 +218,34 @@ while True:
             exit()
             
         if USE_CAMERA:
-            print("[INFO] 正在初始化攝影機硬體...")
-            cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-            if not cap.isOpened(): cap = cv2.VideoCapture(0)
-            if not cap.isOpened():
-                print("[WARNING] 偵測不到攝影機硬體，退回模式選單。")
-                continue 
+            print("🔄 Initializing camera...")
+            cap = None
+            
+            # 💡 自動掃描索引 0, 1, 2，尋找抓得到的攝影機
+            for cam_idx in [0, 1, 2]:
+                temp_cap = cv2.VideoCapture(cam_idx, cv2.CAP_DSHOW)
+                if not temp_cap.isOpened():
+                    temp_cap = cv2.VideoCapture(cam_idx)
                 
-            # 設定攝影機傳輸格式與解析度，確保幀率與效能穩定
+                if temp_cap.isOpened():
+                    ret, test_frame = temp_cap.read()
+                    if ret and test_frame is not None:
+                        cap = temp_cap
+                        print(f"✅ 成功找到並連接攝影機 (Index: {cam_idx})")
+                        break
+                    else:
+                        temp_cap.release()
+            
+            if cap is None or not cap.isOpened():
+                print("⚠️ 找不到任何可用的攝影機！自動退回選單。")
+                print("👉 請檢查：1. USB 是否插緊 2. 攝影機是否被其他軟體 (如 Windows 相機 App) 佔用")
+                continue 
+
+            # 💡 設定 MJPG 格式以開啟 1080p 高畫質與 30 FPS 順暢度
             cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
             cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
             cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
-            print("[INFO] 相機模式就緒，等待檢測指令。")
+            print("🚀 (Camera Mode) Ready to start!")
         else:
             print("[INFO] 照片模式就緒，等待載入圖檔。")
 
