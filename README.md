@@ -8,15 +8,12 @@
 
 ## 系統檢測成果 (Inspection Demo)
 
-<p align="center">
-  <img src="assets/melon_detection_demo.jpg" width="700" alt="哈密瓜多角度瑕疵偵測成果"><br>
-  <sub><b>圖：系統多角度旋轉拍照、YOLOv8 瑕疵標註與數據彙整畫面</b></sub>
-</p>
+<img width="800" height="860" alt="image" src="https://github.com/user-attachments/assets/4f6dcb22-5cd9-490d-9cca-0e17358933d3" />
 
 > 💡 **檢測成果說明**：
 > * **全方位檢測**：透過旋轉平台拍攝哈密瓜四個面，解決實物為3D之情形。
 > * **瑕疵標記與統整**：自動計算哈密瓜實總瑕疵數。
-> *( 註：因農作物季節限制，上圖為開發階段使用實體哈密瓜之完整辨識結果。最新版本的UI已不同，而其餘與現階段無誤
+> *( 註：因農作物季節限制，上圖為開發階段使用實體哈密瓜之完整辨識結果。最新版本的UI已不同，而其餘與現階段無誤)
 
 ---
 
