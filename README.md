@@ -8,7 +8,7 @@
 
 ## 系統檢測成果 (Inspection Demo)
 
-<img width="800" height="860" alt="image" src="https://github.com/user-attachments/assets/4f6dcb22-5cd9-490d-9cca-0e17358933d3" />
+<img width="326" height="360" alt="image" src="https://github.com/user-attachments/assets/03b5bb37-cbc3-4e4c-a3ba-286e71b22a4f" />
 
 > 💡 **檢測成果說明**：
 > * **全方位檢測**：透過旋轉平台拍攝哈密瓜四個面，解決實物為3D之情形。
