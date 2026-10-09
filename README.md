@@ -19,8 +19,8 @@
 
 ### 系統架構與技術 (Tech Stack)
 
-* **Libraries (函式庫)**：`Ultralytics YOLOv8` (AI偵測)、`OpenCV` (影像處理與 MJPG 強制解碼)、`PySerial` (雙向連結)、`HX711.h` (重量感應)
-* **Systems (核心系統與 UI 介面)**：Python 3.x (主控)、Tkinter GUI (現場圖形操作介面)、CSV 自動化日誌 (檢測數據報表)、Arduino (.ino) (控制馬達轉動與重量讀取)
+* **Libraries (函式庫)**：`Ultralytics YOLOv8` (AI偵測)、`OpenCV` (影像處理)、`PySerial` (雙向連結)、`HX711.h` (重量感應)
+* **Systems (核心系統與 UI 介面)**：Python 3.x (主控)、CSV 自動化日誌 (檢測數據報表)、Arduino (.ino) (控制馬達轉動與重量讀取)
 * **Hardware (實體硬體與感測器)**：Arduino Uno (主控板)、HX711 Load Cell (重量感應模組)、旋轉直流馬達、1080p HD WebCam (高清視覺鏡頭)
 
 ---
